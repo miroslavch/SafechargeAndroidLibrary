@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SafeChargeSDK</string>
+    <string name="action_settings">Settings</string>
+    <string name="fieldCreditCardHint">Credit Card Number</string>
+    <string name="monthYearHint">MM/YY</string>
+    <string name="cvvHint">CVV</string>
+</resources>
