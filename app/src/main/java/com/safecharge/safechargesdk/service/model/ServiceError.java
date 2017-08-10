@@ -1,13 +1,13 @@
 package com.safecharge.safechargesdk.service.model;
 
-public class SafechargeServiceError {
+public class ServiceError {
 
     private String errorDescription;
     private String errorCode;
 
 
-    public SafechargeServiceError(String errorDescription,
-                                  String errorCode) {
+    public ServiceError(String errorDescription,
+                        String errorCode) {
         this.errorDescription = errorDescription;
         this.errorCode = errorCode;
     }

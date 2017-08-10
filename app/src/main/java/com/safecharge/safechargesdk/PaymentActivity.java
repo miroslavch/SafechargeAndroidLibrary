@@ -2,8 +2,6 @@ package com.safecharge.safechargesdk;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-//import android.content.DialogInterface;
-//import android.content.DialogInterface.OnClickListener;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.content.Intent;
@@ -24,17 +22,15 @@ import com.safecharge.safechargesdk.credit_card_utils.CreditCardValidator;
 import com.safecharge.safechargesdk.credit_card_utils.ExpDateHelper;
 import com.safecharge.safechargesdk.service.EventListeners.AuthenticateResultObserver;
 import com.safecharge.safechargesdk.service.EventListeners.TokenizeResultObserver;
+import com.safecharge.safechargesdk.service.model.AuthorizationResponseData;
 import com.safecharge.safechargesdk.service.model.CardTransactionModel;
 import com.safecharge.safechargesdk.service.model.CardTransactionResultModel;
-import com.safecharge.safechargesdk.service.model.SafechargeServiceError;
+import com.safecharge.safechargesdk.service.model.ServiceError;
 
 import com.safecharge.safechargesdk.service.model.CardData;
 import com.safecharge.safechargesdk.service.SafechargeService;
 import com.safecharge.safechargesdk.service.ServiceConstants;
-import com.safecharge.safechargesdk.service.model.SessionAuthModel;
-import com.safecharge.safechargesdk.service.model.SessionModel;
-
-
+import com.safecharge.safechargesdk.service.model.AuthorizationRequest;
 
 
 public class PaymentActivity extends AppCompatActivity {
@@ -94,7 +90,6 @@ public class PaymentActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int start, int end, int count) {
 
                 if( m_cvvField.getText().toString().length() >= m_enteredCardType.getCardCVVLength() ) {
-                    //m_payButton.requestFocus();
                     getWindow().getDecorView().clearFocus();
                 }
             }
@@ -199,7 +194,6 @@ public class PaymentActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int end, int count) {
                 if (!m_expDateUpdateFlag) {
-                    System.out.println("cs:" + charSequence.toString() + " start:" + start + " end:" + end + " count:" + count);
                     boolean complete = m_expDateHelper.updateBuffer(charSequence.toString(), start, end, count);
 
                     m_expDateUpdateFlag = true;
@@ -246,24 +240,22 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     public void onPayPress(View v) {
-        SessionAuthModel authModel = new SessionAuthModel("8912193623117089371", "125823","111899","mY4QUnfnH2JO8cnSN6fm0aqRMsXOUDKu1Cx0im5eFzHOiGQ9WPbQaFopSgO1Vmp8");
+        AuthorizationRequest authModel = new AuthorizationRequest("8912193623117089371", "125823","111899","mY4QUnfnH2JO8cnSN6fm0aqRMsXOUDKu1Cx0im5eFzHOiGQ9WPbQaFopSgO1Vmp8");
 
         m_safechargeService.authenticate(authModel, new AuthenticateResultObserver() {
             @Override
-            public void onSuccessfulResult(SessionModel sessionAuthModel) {
+            public void onSuccessfulResult(AuthorizationResponseData sessionAuthModel) {
                 tokenizeCard(sessionAuthModel);
             }
 
             @Override
-            public void onErrorResult(SafechargeServiceError error) {
+            public void onErrorResult(ServiceError error) {
                 showErrorDialog(error);
             }
         });
     }
 
-    public void tokenizeCard(SessionModel sessionAuthModel) {
-
-        System.out.println(sessionAuthModel.toString());
+    public void tokenizeCard(AuthorizationResponseData sessionAuthModel) {
         CardTransactionModel model = new CardTransactionModel(sessionAuthModel.getSessionToken(),sessionAuthModel.getMerchantSiteId());
 
         m_safechargeService.tokenizeCard(model, new TokenizeResultObserver() {
@@ -273,14 +265,14 @@ public class PaymentActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onErrorResult(SafechargeServiceError error) {
+            public void onErrorResult(ServiceError error) {
                 showErrorDialog(error);
             }
         });
     }
 
 
-    private void showErrorDialog(SafechargeServiceError error) {
+    private void showErrorDialog(ServiceError error) {
         new AlertDialog.Builder(this)
                 .setTitle("Error")
                 .setMessage(error.getErrorDescription() + " error code: " + error.getErrorCode())

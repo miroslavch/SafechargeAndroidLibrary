@@ -1,9 +1,9 @@
 package com.safecharge.safechargesdk.service;
 
+import com.safecharge.safechargesdk.service.model.AuthorizationRequest;
+import com.safecharge.safechargesdk.service.model.AuthorizationResponseData;
 import com.safecharge.safechargesdk.service.model.CardTransactionModel;
-import com.safecharge.safechargesdk.service.model.SafechargeServiceError;
-import com.safecharge.safechargesdk.service.model.SessionAuthModel;
-import com.safecharge.safechargesdk.service.model.SessionModel;
+import com.safecharge.safechargesdk.service.model.ServiceError;
 import com.safecharge.safechargesdk.service.model.CardTransactionResultModel;
 import com.safecharge.safechargesdk.service.EventListeners.AuthenticateResultObserver;
 import com.safecharge.safechargesdk.service.EventListeners.TokenizeResultObserver;
@@ -30,13 +30,13 @@ public class SafechargeService {
                 .build();
     }
 
-    public void authenticate(SessionAuthModel authModel, final AuthenticateResultObserver observer) {
+    public void authenticate(AuthorizationRequest authModel, final AuthenticateResultObserver observer) {
         try {
             SafechargeRetrofitCallInterface service = m_retrofit.create(SafechargeRetrofitCallInterface.class);
-            Call<SessionModel> result = service.authenticate(authModel);
-            result.enqueue(new Callback<SessionModel>() {
+            Call<AuthorizationResponseData> result = service.authenticate(authModel);
+            result.enqueue(new Callback<AuthorizationResponseData>() {
                 @Override
-                public void onResponse(Call<SessionModel> call, Response<SessionModel> response) {
+                public void onResponse(Call<AuthorizationResponseData> call, Response<AuthorizationResponseData> response) {
                     if ( response.body() != null ) {
                         if( response.body().isError() ) {
                             observer.onErrorResult(response.body().checkAndReturnError());
@@ -44,17 +44,17 @@ public class SafechargeService {
                             observer.onSuccessfulResult(response.body());
                         }
                     } else {
-                        observer.onErrorResult(new SafechargeServiceError("Empty response",UNHANDLED_ERROR_CODE_STRING));
+                        observer.onErrorResult(new ServiceError("Empty response",UNHANDLED_ERROR_CODE_STRING));
                     }
                 }
 
                 @Override
-                public void onFailure(Call<SessionModel> call, Throwable t) {
-                    observer.onErrorResult(new SafechargeServiceError(t.getMessage(),UNHANDLED_ERROR_CODE_STRING));
+                public void onFailure(Call<AuthorizationResponseData> call, Throwable t) {
+                    observer.onErrorResult(new ServiceError(t.getMessage(),UNHANDLED_ERROR_CODE_STRING));
                 }
             });
         } catch ( Exception e ) {
-            observer.onErrorResult(new SafechargeServiceError(e.toString(),UNHANDLED_ERROR_CODE_STRING));
+            observer.onErrorResult(new ServiceError(e.toString(),UNHANDLED_ERROR_CODE_STRING));
         }
     }
 
@@ -73,17 +73,17 @@ public class SafechargeService {
                             observer.onSuccessfulResult(response.body());
                         }
                     } else {
-                        observer.onErrorResult(new SafechargeServiceError("Empty response",UNHANDLED_ERROR_CODE_STRING));
+                        observer.onErrorResult(new ServiceError("Empty response",UNHANDLED_ERROR_CODE_STRING));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<CardTransactionResultModel> call, Throwable t) {
-                    observer.onErrorResult(new SafechargeServiceError(t.getMessage(),UNHANDLED_ERROR_CODE_STRING));
+                    observer.onErrorResult(new ServiceError(t.getMessage(),UNHANDLED_ERROR_CODE_STRING));
                 }
             });
         } catch ( Exception e ) {
-            observer.onErrorResult(new SafechargeServiceError(e.toString(),UNHANDLED_ERROR_CODE_STRING));
+            observer.onErrorResult(new ServiceError(e.toString(),UNHANDLED_ERROR_CODE_STRING));
         }
     }
 

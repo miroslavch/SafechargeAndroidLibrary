@@ -1,7 +1,5 @@
 package com.safecharge.safechargesdk.service.model;
 
-import com.safecharge.safechargesdk.service.model.BillingAddress;
-import com.safecharge.safechargesdk.service.model.CardData;
 
 public class CardTransactionModel
 {

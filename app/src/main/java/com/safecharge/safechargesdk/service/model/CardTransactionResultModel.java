@@ -102,13 +102,13 @@ public class CardTransactionResultModel
         return (this.getStatus().compareToIgnoreCase("SUCCESS") != 0);
     }
 
-    public SafechargeServiceError checkAndReturnError() {
+    public ServiceError checkAndReturnError() {
 
         if (this.isError() == false ){
             return null;
         }
 
-        return new SafechargeServiceError(this.getReason(),this.getErrCode());
+        return new ServiceError(this.getReason(),this.getErrCode());
 
     }
 }

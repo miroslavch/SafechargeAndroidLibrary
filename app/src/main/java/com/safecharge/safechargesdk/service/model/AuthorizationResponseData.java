@@ -1,6 +1,6 @@
 package com.safecharge.safechargesdk.service.model;
 
-public class SessionModel
+public class AuthorizationResponseData
 {
     private String sessionToken;
 
@@ -113,7 +113,7 @@ public class SessionModel
     @Override
     public String toString()
     {
-        return "SessionModel [sessionToken = "+sessionToken+", reason = "+reason+", status = "+status+", internalRequestId = "+internalRequestId+", errCode = "+errCode+", clientRequestId = "+clientRequestId+", merchantId = "+merchantId+", merchantSiteId = "+merchantSiteId+", version = "+version+"]";
+        return "AuthorizationResponseData [sessionToken = "+sessionToken+", reason = "+reason+", status = "+status+", internalRequestId = "+internalRequestId+", errCode = "+errCode+", clientRequestId = "+clientRequestId+", merchantId = "+merchantId+", merchantSiteId = "+merchantSiteId+", version = "+version+"]";
     }
 
 
@@ -122,13 +122,13 @@ public class SessionModel
         return (this.getStatus().compareToIgnoreCase("SUCCESS") != 0);
     }
 
-    public SafechargeServiceError checkAndReturnError() {
+    public ServiceError checkAndReturnError() {
 
         if (this.isError() == false ){
             return null;
         }
 
-        return new SafechargeServiceError(this.getReason(),this.getErrCode());
+        return new ServiceError(this.getReason(),this.getErrCode());
 
     }
 

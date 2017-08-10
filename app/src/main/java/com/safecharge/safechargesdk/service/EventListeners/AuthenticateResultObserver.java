@@ -1,11 +1,10 @@
 package com.safecharge.safechargesdk.service.EventListeners;
 
-import com.safecharge.safechargesdk.service.model.SafechargeServiceError;
-import com.safecharge.safechargesdk.service.model.SessionAuthModel;
-import com.safecharge.safechargesdk.service.model.SessionModel;
+import com.safecharge.safechargesdk.service.model.ServiceError;
+import com.safecharge.safechargesdk.service.model.AuthorizationResponseData;
 
 public interface AuthenticateResultObserver {
 
-    void onSuccessfulResult(SessionModel sessionAuthResult);
-    void onErrorResult(SafechargeServiceError error);
+    void onSuccessfulResult(AuthorizationResponseData sessionAuthResult);
+    void onErrorResult(ServiceError error);
 }

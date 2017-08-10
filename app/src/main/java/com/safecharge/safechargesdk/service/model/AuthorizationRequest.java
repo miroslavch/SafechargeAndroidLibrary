@@ -9,12 +9,12 @@ import java.security.MessageDigest;
 import com.safecharge.safechargesdk.service.ServiceConstants;
 
 
-public class SessionAuthModel {
+public class AuthorizationRequest {
 
-    public SessionAuthModel(String merchantId,
-                            String merchantSiteId,
-                            String clientRequestId,
-                            String secretKey) {
+    public AuthorizationRequest(String merchantId,
+                                String merchantSiteId,
+                                String clientRequestId,
+                                String secretKey) {
         this.merchantId = merchantId;
         this.merchantSiteId = merchantSiteId;
         this.clientRequestId = clientRequestId;
@@ -141,7 +141,7 @@ public class SessionAuthModel {
     @Override
     public String toString()
     {
-        return "SessionAuthModel [timeStamp = " + timeStamp +
+        return "AuthorizationRequest [timeStamp = " + timeStamp +
                 ", clientRequestId = " + clientRequestId +
                 ", merchantId = " + merchantId +
                 ", checksum = " + checksum +
